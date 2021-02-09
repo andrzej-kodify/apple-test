@@ -6,8 +6,9 @@ import makeIterator from '../utils/make-iterator';
 export class ConfigurationOption extends Selector {
     constructor(selector) {
         super(selector);
-        this.optionName = this.find('.form-selector-title');
+        this.description = this.find('.form-selector-title');
         this.priceDelta = this.find('.as-optiontile-pricedelta');
+        // TODO support dropdown and other thingies
     }
 }
 

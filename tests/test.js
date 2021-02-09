@@ -14,8 +14,14 @@ for (const model of Object.values(models)) {
     test(`Choose ${model.friendlyName} model`, async (browser) => {
         await homePage.navigateTo();
         await browser
+            .expect(homePage.globalNavigation.exists)
+            .ok()
             .click(await homePage.globalNavigation.findItem(model.globalNavRef))
+            .expect(macPage.chapterNavigation.exists)
+            .ok()
             .click(await macPage.chapterNavigation.findItem(model.chapterNavRef))
+            .expect(macbookProPage.localNavigation.exists)
+            .ok()
             .click(await macbookProPage.localNavigation.findItem('buy'));
         if (model.bundleModelRef) {
             await browser
@@ -74,7 +80,6 @@ test('Buy most expensive macbook pro 16"', async (browser) => {
             if (highestPriceDelta.intValue < currentPriceDelta.intValue) {
                 highestPriceDelta = currentPriceDelta;
                 mostExpensiveConfigurationOption = configurationOption;
-                await browser.hover(mostExpensiveConfigurationOption);
             }
         }
         if (!mostExpensiveConfigurationOption) {
@@ -88,4 +93,37 @@ test('Buy most expensive macbook pro 16"', async (browser) => {
     }
     await browser.click(buyMacbookCustomizePage.addToCartButton);
     // TODO for some reason running this as an automated test shopping bag is not updated :shrug:
+});
+
+test('Check customization options for macbook pro 16"', async (browser) => {
+    const model = models.pro16;
+    await buyMacbookCustomizePage.navigateTo(model);
+    await browser
+        .expect(buyMacbookCustomizePage.totalPrice.exists)
+        .ok();
+    const configurationOptionGroups = await buyMacbookCustomizePage.getConfigurationOptionGroups();
+    const scrapedOptions = {};
+    for (const configurationOptionGroup of configurationOptionGroups) {
+        const groupName = await configurationOptionGroup.heading.innerText;
+        if (scrapedOptions[groupName]) {
+            throw new Error(`Duplicated group name: ${groupName}`);
+        }
+        scrapedOptions[groupName] = [];
+        const configurationOptions = await configurationOptionGroup.getConfigurationOptions();
+        for (const configurationOption of configurationOptions) {
+            if (!await configurationOption.description.exists) {
+                // ignore for now
+                continue;
+            }
+            const description = await configurationOption.description.textContent;
+            let priceDelta = 0;
+            if (await configurationOption.priceDelta.exists) {
+                priceDelta = currency(await configurationOption.priceDelta.textContent).value;
+            }
+            scrapedOptions[groupName].push({ description, priceDelta });
+        }
+    }
+    await browser
+        .expect(model.configurationOptionGroups)
+        .eql(scrapedOptions);
 });
