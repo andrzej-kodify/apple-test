@@ -1,4 +1,5 @@
 import { t, Selector } from 'testcafe';
+import makeIterator from '../utils/make-iterator';
 
 export class ModelItem extends Selector {
     constructor(selector) {
@@ -41,11 +42,6 @@ export class BundleSelection {
     }
 
     async getBundleSelectors () {
-        const output = [];
-        const bundleSelectorCount = await this.bundleSelectors.count;
-        for (let cnt = 0; cnt < bundleSelectorCount; cnt++) {
-            output.push(new BundleSelector(this.bundleSelectors.nth(cnt)));
-        }
-        return output;
+        return makeIterator(this.bundleSelectors, BundleSelector);
     }
 }

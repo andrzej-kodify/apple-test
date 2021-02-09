@@ -9,4 +9,12 @@ export class BasePage {
             findByAttribute: 'data-analytics-title',
         });
     }
+
+    get url() {
+        throw new Error('Not implemented');
+    }
+
+    async navigateTo() {
+        throw new Error('Not implemented');
+    }
 }
