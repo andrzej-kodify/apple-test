@@ -1,6 +1,6 @@
 import { t } from 'testcafe';
 import config from 'config';
-import { BasePage } from '../base-page';
+import BasePage from '../base-page';
 import { BundleSelection } from '../../components/bundle-selection';
 
 class BuyMacbookPage extends BasePage {
@@ -9,6 +9,7 @@ class BuyMacbookPage extends BasePage {
         this.bundleSelection = new BundleSelection();
     }
 
+    // eslint-disable-next-line class-methods-use-this
     get url() {
         return `${config.get('baseUrl')}/shop/buy-mac`;
     }

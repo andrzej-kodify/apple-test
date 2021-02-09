@@ -1,7 +1,7 @@
 import { t } from 'testcafe';
 import config from 'config';
-import { BasePage } from './base-page';
-import { NavigationBar } from '../components/navigation-bar';
+import BasePage from './base-page';
+import NavigationBar from '../components/navigation-bar';
 
 class MacPage extends BasePage {
     constructor() {
@@ -13,6 +13,7 @@ class MacPage extends BasePage {
         });
     }
 
+    // eslint-disable-next-line class-methods-use-this
     get url() {
         return `${config.get('baseUrl')}/mac`;
     }

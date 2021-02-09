@@ -1,7 +1,6 @@
-import { Selector } from 'testcafe';
-import { NavigationBar } from '../components/navigation-bar';
+import NavigationBar from '../components/navigation-bar';
 
-export class BasePage {
+export default class BasePage {
     constructor() {
         this.globalNavigation = new NavigationBar({
             contextSelector: '#ac-globalnav',
@@ -10,10 +9,12 @@ export class BasePage {
         });
     }
 
+    // eslint-disable-next-line class-methods-use-this
     get url() {
         throw new Error('Not implemented');
     }
 
+    // eslint-disable-next-line class-methods-use-this
     async navigateTo() {
         throw new Error('Not implemented');
     }

@@ -1,4 +1,6 @@
-import { t, Selector } from 'testcafe';
+/* eslint-disable max-classes-per-file */
+// being lazy, putting classes in one file
+import { Selector } from 'testcafe';
 import makeIterator from '../utils/make-iterator';
 
 export class ModelItem extends Selector {
@@ -10,7 +12,7 @@ export class ModelItem extends Selector {
 
 export class ColorOption extends Selector {
     constructor(selector) {
-        super(selector)
+        super(selector);
         this.friendlyName = this.selector.getAttribute('datacolor');
     }
 }
@@ -25,7 +27,7 @@ export class BundleSelector {
         this.addToCartButton = this.selector.find('button[type="submit"]');
     }
 
-    async findColor (friendlyName) {
+    async findColor(friendlyName) {
         return new ColorOption(this.colors.withAttribute('datacolor', friendlyName));
     }
 }
@@ -34,14 +36,14 @@ export class BundleSelection {
     constructor() {
         this.selector = new Selector('bundle-selection');
         this.models = this.selector.find('fieldset button');
-        this.bundleSelectors = this.selector.find('.as-bundleselection-modelactive .as-macbundle bundle-selector');        
+        this.bundleSelectors = this.selector.find('.as-bundleselection-modelactive .as-macbundle bundle-selector');
     }
 
-    async findModel (name) {
+    async findModel(name) {
         return new ModelItem(this.models.withAttribute('data-autom', `filterButton-${name}`));
     }
 
-    async getBundleSelectors () {
+    async getBundleSelectors() {
         return makeIterator(this.bundleSelectors, BundleSelector);
     }
 }

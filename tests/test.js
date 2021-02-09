@@ -1,20 +1,22 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+import currency from 'currency.js';
 import models from '../data/mac/models';
 import homePage from '../pages/home-page';
 import macPage from '../pages/mac-page';
 import macbookProPage from '../pages/macbook-pro-page';
 import buyMacbookPage from '../pages/shop/buy-macbook-page';
-import currency from 'currency.js';
 import buyMacbookCustomizePage from '../pages/shop/buy-macbook-customize-page';
 
 fixture('Buy a mac');
 
 for (const model of Object.values(models)) {
-    test(`Choose ${model.friendlyName} model`, async browser => {
+    test(`Choose ${model.friendlyName} model`, async (browser) => {
         await homePage.navigateTo();
         await browser
             .click(await homePage.globalNavigation.findItem(model.globalNavRef))
             .click(await macPage.chapterNavigation.findItem(model.chapterNavRef))
-            .click(await macbookProPage.localNavigation.findItem('buy'))
+            .click(await macbookProPage.localNavigation.findItem('buy'));
         if (model.bundleModelRef) {
             await browser
                 .expect(buyMacbookPage.bundleSelection.models.exists)
@@ -31,7 +33,7 @@ for (const model of Object.values(models)) {
     });
 }
 
-test('Buy most expensive macbook pro 16"', async browser => {
+test('Buy most expensive macbook pro 16"', async (browser) => {
     const model = models.pro16;
     await buyMacbookPage.navigateTo(model);
     const modelItem = await buyMacbookPage.bundleSelection.findModel(model.bundleModelRef);
@@ -40,10 +42,11 @@ test('Buy most expensive macbook pro 16"', async browser => {
         .ok('Model not selected correctly');
     const bundleSelectors = await buyMacbookPage.bundleSelection.getBundleSelectors();
     let mostExpensiveBundleSelector;
-    let highestPrice = 0;
+    let highestPrice = currency(0);
     for (const bundleSelector of bundleSelectors) {
+    // eslint-disable-next-line no-await-in-loop
         const currentPrice = currency(await bundleSelector.price.textContent);
-        if (highestPrice < currentPrice) { // TBD what if they're equal?
+        if (highestPrice.intValue < currentPrice.intValue) { // TBD what if they're equal?
             highestPrice = currentPrice;
             mostExpensiveBundleSelector = bundleSelector;
         }
@@ -57,22 +60,24 @@ test('Buy most expensive macbook pro 16"', async browser => {
         .ok()
         .expect(currency(await buyMacbookCustomizePage.totalPrice.textContent))
         .eql(highestPrice);
-    const configuratioOptionGroups = await buyMacbookCustomizePage.getConfigurationOptionGroups();
+    const configurationOptionGroups = await buyMacbookCustomizePage.getConfigurationOptionGroups();
     let currentTotalPrice = highestPrice;
-    for (const configurationOptionGroup of configuratioOptionGroups) {
-        console.log(`configurationOptionGroup ${await configurationOptionGroup.heading.textContent}`);
+    for (const configurationOptionGroup of configurationOptionGroups) {
         const configurationOptions = await configurationOptionGroup.getConfigurationOptions();
         let mostExpensiveConfigurationOption;
-        let highestPriceDelta = 0;
+        let highestPriceDelta = currency(0);
         for (const configurationOption of configurationOptions) {
+            if (!await configurationOption.priceDelta.exists) {
+                continue;
+            }
             const currentPriceDelta = currency(await configurationOption.priceDelta.textContent);
-            if (highestPriceDelta < currentPriceDelta) {
+            if (highestPriceDelta.intValue < currentPriceDelta.intValue) {
                 highestPriceDelta = currentPriceDelta;
                 mostExpensiveConfigurationOption = configurationOption;
+                await browser.hover(mostExpensiveConfigurationOption);
             }
         }
         if (!mostExpensiveConfigurationOption) {
-            // ignore for now, needs more thought
             continue;
         }
         await browser.click(mostExpensiveConfigurationOption);

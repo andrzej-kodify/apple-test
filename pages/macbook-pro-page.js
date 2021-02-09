@@ -1,7 +1,7 @@
 import { t } from 'testcafe';
 import config from 'config';
-import { BasePage } from './base-page';
-import { NavigationBar } from '../components/navigation-bar';
+import BasePage from './base-page';
+import NavigationBar from '../components/navigation-bar';
 
 class MacbookProPage extends BasePage {
     constructor() {
@@ -9,10 +9,11 @@ class MacbookProPage extends BasePage {
         this.localNavigation = new NavigationBar({
             contextSelector: '#ac-localnav',
             itemsSelector: 'a',
-            findByAttribute: 'data-analytics-title'
+            findByAttribute: 'data-analytics-title',
         });
     }
 
+    // eslint-disable-next-line class-methods-use-this
     get url() {
         return `${config.get('baseUrl')}/macbook-pro-16`;
     }
