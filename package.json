@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "Test apple.com macboook purchase process",
   "scripts": {
-    "test": "testcafe chrome ./tests",
-    "test:ci": "testcafe chrome:headless ./tests",
+    "test": "testcafe firefox:headless ./tests -c 2 --video artifacts/videos -s path=artifacts/screenshots,takeOnFails=true --skip-js-errors",
+    "test:debug": "testcafe chrome ./tests --debug-on-fail",
     "lint": "eslint --ext .js ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.20",
     "config": "^3.3.3",
     "currency.js": "^2.0.3",
     "testcafe": "^1.10.1"

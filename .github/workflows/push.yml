@@ -4,13 +4,11 @@ on:
   workflow_dispatch: ~
   push:
     branches:
-      - master
-      - develop
-      - release/**
+      - main
 
 jobs:
   build:
-    name: PR checks
+    name: Run tests
     runs-on: ubuntu-20.04
     env:
       CI: true
@@ -33,4 +31,10 @@ jobs:
       run: npm ci
     - name: run tests
       run: |
-        npm test:ci
+        npm run test
+    - name: Archive artifacts
+      uses: actions/upload-artifact@master
+      if: always()
+      with:
+        name: artifacts
+        path: ./artifacts
