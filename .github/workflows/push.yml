@@ -1,0 +1,36 @@
+name: Run tests
+
+on:
+  workflow_dispatch: ~
+  push:
+    branches:
+      - master
+      - develop
+      - release/**
+
+jobs:
+  build:
+    name: PR checks
+    runs-on: ubuntu-20.04
+    env:
+      CI: true
+    strategy:
+      fail-fast: true
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 14.15.4
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - name: install dependencies
+      run: npm ci
+    - name: run tests
+      run: |
+        npm test:ci

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Test apple.com macboook purchase process",
   "scripts": {
-    "test": "testcafe chrome ./tests"
+    "test": "testcafe chrome ./tests",
+    "test:ci": "testcafe chrome:headless ./tests",
+    "lint": "eslint --ext .js ."
   },
   "author": "",
   "license": "ISC",
