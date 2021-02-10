@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Test apple.com macboook purchase process",
   "scripts": {
-    "test": "testcafe firefox:headless ./tests -c 4 --video artifacts/videos -s path=artifacts/screenshots,takeOnFails=true",
+    "test": "testcafe firefox:headless ./tests -c 2 --video artifacts/videos -s path=artifacts/screenshots,takeOnFails=true --skip-js-errors",
     "test:debug": "testcafe chrome ./tests --debug-on-fail",
     "lint": "eslint --ext .js ."
   },
