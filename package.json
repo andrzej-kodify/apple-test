@@ -1,0 +1,22 @@
+{
+  "name": "apple-test",
+  "version": "1.0.0",
+  "description": "Test apple.com macboook purchase process",
+  "scripts": {
+    "test": "testcafe chrome ./tests",
+    "test:ci": "testcafe chrome:headless ./tests",
+    "lint": "eslint --ext .js ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.3",
+    "currency.js": "^2.0.3",
+    "testcafe": "^1.10.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.19.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}
