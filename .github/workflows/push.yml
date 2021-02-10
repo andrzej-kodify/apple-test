@@ -31,4 +31,4 @@ jobs:
       run: npm ci
     - name: run tests
       run: |
-        npm test:ci
+        npm run test:ci
