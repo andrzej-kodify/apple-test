@@ -31,7 +31,7 @@ jobs:
       run: npm ci
     - name: run tests
       run: |
-        npm run tests
+        npm run test
     - name: Archive artifacts
       uses: actions/upload-artifact@master
       if: always()
